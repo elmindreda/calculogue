@@ -117,7 +117,7 @@ static void step(TLVM* vm)
 {
     const TLContext* context = vm->contexts[vm->ccount - 1];
 
-    printf("(Depth %i) %s\n", vm->ccount - 1, context->token.s);
+    printf("(Depth %zi) %s\n", vm->ccount - 1, context->token.s);
     printf("  Primary     ");
     print_stack(&context->primary);
     printf("  Secondary : ");
