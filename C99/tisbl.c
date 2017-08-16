@@ -272,8 +272,8 @@ extern void tl_multipop(TLVM* vm, TLStack* target, TLStack* source)
     if (!tl_is_integer(count))
     {
         TLValue string = tl_cast_value(count, TL_STRING);
-        tl_panic(vm, "Multipop count not an integer: %s (%s:%u)",
-                 string.s, tl_file(vm, string), tl_line(string));
+        tl_panic(vm, "Multipop count not an integer: %s (%s:%u:%u)",
+                 string.s, tl_file(vm, string), tl_line(string), tl_col(string));
     }
 
     tl_reserve(target, target->count + count.i);
@@ -381,9 +381,9 @@ extern void tl_clear_value(TLValue* v)
     memset(v, 0, sizeof(TLValue));
 }
 
-extern TLLoc tl_new_loc(TLVM* vm, const char* file, uint16_t line)
+extern TLLoc tl_new_loc(TLVM* vm, const char* file, uint32_t line, uint16_t col)
 {
-    TLLoc loc = { 0, line };
+    TLLoc loc = { 0, line, col };
 
     for ( ;  loc.file < vm->fcount;  loc.file++)
     {
@@ -403,7 +403,7 @@ extern TLLoc tl_new_loc(TLVM* vm, const char* file, uint16_t line)
 
 extern void tl_tokenize(TLVM* vm, TLStack* target, const char* file, const char* text)
 {
-    TLLoc loc = tl_new_loc(vm, file, 1);
+    TLLoc loc = tl_new_loc(vm, file, 1, 1);
     TLStack tokens = tl_new_stack();
 
     while (*text)
@@ -417,9 +417,12 @@ extern void tl_tokenize(TLVM* vm, TLStack* target, const char* file, const char*
                 if (is_newline(*end))
                 {
                     loc.line++;
+                    loc.col = 1;
                     if (end[0] == '\r' && end[1] == '\n')
                         end++;
                 }
+                else
+                    loc.col++;
 
                 end++;
             }
@@ -436,6 +439,7 @@ extern void tl_tokenize(TLVM* vm, TLStack* target, const char* file, const char*
 
             char* s = tl_clone_string_range(text, end - text);
             tl_push_value(&tokens, (TLValue) { { .s = s }, TL_STRING, loc });
+            loc.col += end - text;
         }
 
         text = end;

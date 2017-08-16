@@ -138,9 +138,10 @@ static void step(TLVM* vm)
 
 static void panic(TLVM* vm, const char* message)
 {
-    fprintf(stderr, "%s:%u: error: %s\n",
+    fprintf(stderr, "%s:%u:%u: error: %s\n",
             tl_top_file(vm),
             tl_top_line(vm),
+            tl_top_col(vm),
             message);
     fprintf(stderr, "Call stack:\n");
 
@@ -148,9 +149,10 @@ static void panic(TLVM* vm, const char* message)
     {
         fprintf(stderr, "#%zu ", i);
         print_value(stderr, &vm->contexts[i]->token);
-        fprintf(stderr, " (%s:%u)\n",
+        fprintf(stderr, " (%s:%u:%u)\n",
                 tl_file(vm, vm->contexts[i]->token),
-                tl_line(vm->contexts[i]->token));
+                tl_line(vm->contexts[i]->token),
+                tl_col(vm->contexts[i]->token));
     }
 
     exit(EXIT_FAILURE);

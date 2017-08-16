@@ -41,8 +41,10 @@ typedef void TLPanicProc(TLVM* vm, const char* message);
 #define tl_top_loc(vm) (tl_top_context(vm)->token.loc)
 #define tl_top_file(vm) tl_file(vm, tl_top_context(vm)->token)
 #define tl_top_line(vm) tl_line(tl_top_context(vm)->token)
+#define tl_top_col(vm) tl_col(tl_top_context(vm)->token)
 #define tl_file(vm, v) ((vm)->files[(v).loc.file])
 #define tl_line(v) ((v).loc.line)
+#define tl_col(v) ((v).loc.col)
 
 #pragma pack(push, 1)
 
@@ -50,6 +52,7 @@ struct TLLoc
 {
     uint16_t file;
     uint32_t line;
+    uint16_t col;
 };
 
 struct TLValue
@@ -117,7 +120,7 @@ extern void tl_clear_vm(TLVM* vm);
 extern void tl_push_context(TLVM* vm, TLStack* code, TLStack* input, TLStack* output, TLFinal final);
 extern void tl_pop_context(TLVM* vm);
 extern void tl_execute(TLVM* vm);
-extern TLLoc tl_new_loc(TLVM* vm, const char* file, uint16_t line);
+extern TLLoc tl_new_loc(TLVM* vm, const char* file, uint32_t line, uint16_t col);
 extern void tl_tokenize(TLVM* vm, TLStack* target, const char* file, const char* text);
 extern void tl_panic(TLVM* vm, const char* format, ...);
 

@@ -12,7 +12,7 @@ complex TISBL programs.
 This method requires the addition of two kinds of state.
 
 Each value on every stack additionally contains a location.  A location is
-a file name and the line number within that file.
+a file name and the line and column numbers within that file.
 
 Each context in the context stack additionally contains the value it is
 currently executing, including its location.  These values together form the
