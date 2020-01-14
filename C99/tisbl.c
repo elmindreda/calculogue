@@ -466,6 +466,8 @@ extern void tl_execute(TLVM* vm)
             if (context->final == TL_LOOP && tl_pop_bool(vm, context->input))
             {
                 tl_clear_stack(&context->execution);
+                tl_clear_stack(&context->primary);
+                tl_clear_stack(&context->secondary);
                 context->execution = tl_clone_stack(&context->loop);
             }
             else
