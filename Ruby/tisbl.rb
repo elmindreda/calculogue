@@ -98,7 +98,7 @@ def bool(v)
 end
 
 def number?(v)
-    v.is_a?(Fixnum) or v.is_a?(Float)
+    v.is_a?(Integer) or v.is_a?(Float)
 end
 
 def error(message)

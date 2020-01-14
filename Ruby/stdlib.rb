@@ -104,7 +104,7 @@ $verbs['number?'] = ->(c, i, o) do
 end
 
 $verbs['integer?'] = ->(c, i, o) do
-    c[o].push bool(c[i].pop.is_a?(Fixnum))
+    c[o].push bool(c[i].pop.is_a?(Integer))
 end
 
 $verbs['float?'] = ->(c, i, o) do
