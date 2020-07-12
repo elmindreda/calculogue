@@ -196,7 +196,6 @@ int main(int argc, char** argv)
     TLVM vm = tl_new_vm(read_line, print, step, panic);
     vm.trace = trace;
     tl_register_stdlib(&vm);
-    tl_push_context(&vm, NULL, NULL, NULL, TL_RETURN);
 
     if (argc)
     {
@@ -215,12 +214,17 @@ int main(int argc, char** argv)
         fread(text, 1, size, file);
         fclose(file);
 
-        tl_tokenize(&vm, &tl_top_context(&vm)->execution, argv[0], text);
+        TLStack code = tl_new_stack();
+        tl_tokenize(&vm, &code, argv[0], text);
         free(text);
+
+        tl_push_context(&vm, &code, NULL, NULL, TL_RETURN);
         tl_execute(&vm);
     }
     else
     {
+        tl_push_context(&vm, NULL, NULL, NULL, TL_RETURN);
+
         for (;;)
         {
             printf("> ");
