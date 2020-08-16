@@ -498,7 +498,7 @@ extern void tl_execute(TLVM* vm)
             {
                 source = source_stack(context, *start);
                 if (!source)
-                    tl_panic(vm, "Invalid input stack: %c", *start);
+                    tl_panic(vm, "Invalid input stack in top context: %c", *start);
 
                 start++;
             }
